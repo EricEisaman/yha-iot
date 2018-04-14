@@ -1,4 +1,4 @@
-# Design Considerations
+# Admin App Design Considerations
 The structure of this starter app should be considered as you design your fully fledged IoT application.
 
 ## Security, Responsibility, and Data Governance

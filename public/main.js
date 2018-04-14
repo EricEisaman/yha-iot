@@ -5,7 +5,7 @@ var io = window.io;
 // Shortcuts to DOM Elements.
 var signInButton = document.getElementById('sign-in-button');
 var signOutButton = document.getElementById('sign-out-button');
-var userInfo = document.getElementById('user-ids');
+var dynamic = document.getElementById('dynamic');
 var splashPage = document.getElementById('page-splash');
 var gamePage = document.getElementById('page-game');
 var listeningFirebaseRefs = [];
@@ -44,7 +44,7 @@ function writeUserData(userId, name, email, imageUrl) {
  * Cleanups the UI and removes all Firebase listeners.
  */
 function cleanupUi() {
-  userInfo.innerHTML = '';
+  dynamic.innerHTML = '';
   listeningFirebaseRefs.forEach(function(ref) {
     ref.off();
   });
@@ -89,15 +89,17 @@ function onAuthStateChanged(user) {
     splashPage.style.display = 'none';
     checkIfUserExists(user);
     startDatabaseQueries();
-    userInfo.innerHTML += `<h3>Your Google Firebase UID is ${user.uid}</h3>`;
+    dynamic.innerHTML += `<h3>Your Google Firebase UID is ${user.uid}</h3>`;
     socket = io();
     socket.on('connect',function(){
-      userInfo.innerHTML += `<h3>Your SocketIO ID is ${socket.id}</h3>`;
+      dynamic.innerHTML += `<h3>Your SocketIO ID is ${socket.id}</h3>`;
       socket.emit('sendFBData',{uid:user.uid,email:user.email});
+      window.custom.logIn(socket,user);
     });
   } else {
     // Display the splash page where you can sign-in.
     splashPage.style.display = '';
+    window.custom.logOut();
   }
 }
 
